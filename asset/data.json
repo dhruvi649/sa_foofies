@@ -1,0 +1,34 @@
+{
+   "location":[
+      {
+         "latitude":"23.031698",
+         "longitude":"72.472894",
+         "name":"Flames Catering"
+      },
+      {
+         "latitude":"23.030942",
+         "longitude":"72.473278",
+         "name":"Jugaadi Adda"
+      },
+      {
+         "latitude":"23.067477",
+         "longitude":"72.486668",
+         "name":"MOJ Cafe & Restro"
+      },
+      {
+         "latitude":"23.023238",
+         "longitude":"72.504421",
+         "name":"Masty Fast Food"
+      },
+      {
+         "latitude":"23.024228",
+         "longitude":"72.504489",
+         "name":"Desi Food"
+      },
+      {
+         "latitude":"23.024517",
+         "longitude":"72.504246",
+         "name":"Casino Royal Food Park"
+      }
+   ]
+}

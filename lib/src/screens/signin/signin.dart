@@ -1,0 +1,224 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:sa_foodie/src/model/user_model.dart';
+import 'package:sa_foodie/src/screens/dashboard/dashboard.dart';
+import 'package:sa_foodie/src/screens/login/login_screen.dart';
+
+import '../../../constants.dart';
+import '../../firebase/firebase_service.dart';
+
+class SigninScreen extends StatefulWidget {
+@override
+State<SigninScreen> createState() => SigninScreenState();
+}
+
+class SigninScreenState extends State<SigninScreen> {
+  final _auth = FirebaseAuth.instance;
+
+  final _formKey = GlobalKey<FormState>();
+  final nameEditingController = new TextEditingController();
+  final emailEditingController = new TextEditingController();
+  final passwordEditingController = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+
+    final nameField = TextFormField(
+      autofocus: false,
+      controller: nameEditingController,
+      //validator: (){},
+      onSaved: (value){
+        nameEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+          hintText: "Username",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )
+      ),
+    );
+
+    final emailField = TextFormField(
+      autofocus: false,
+      controller: emailEditingController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please enter your email");
+        }
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return ("Please enter a valid email");
+        }
+        return null;
+      },
+      onSaved: (value){
+        emailEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+          hintText: "Email",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )
+      ),
+    );
+
+    final passwordField = TextFormField(
+      autofocus: false,
+      controller: passwordEditingController,
+      validator: (value) {
+        RegExp regex = new RegExp(r'^.{6,}$');
+        if (value!.isEmpty) {
+          return ("Please enter your password");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Please enter valid password(Minimum 6 character)");
+        }
+      },
+      obscureText: true,
+      onSaved: (value){
+        passwordEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+          hintText: "Password",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )
+      ),
+    );
+
+    final signupButton = Material(
+      elevation: 5,
+      color: Colors.yellow,
+      borderRadius: BorderRadius.circular(30),
+      child: MaterialButton(
+        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: (){
+          SignUp(emailEditingController.text, passwordEditingController.text);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        },
+        child: Text('SignUp', style: TextStyle(
+          fontFamily: 'Montserrat',
+          fontSize: 20.0,
+          color: Colors.black,
+        ),),),
+    );
+
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.all(36),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 70,
+                    ),
+                    Text('Welcome to Foodies', style: TextStyle(color: Colors.black,
+                        fontSize: 30, fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',),),
+                  SizedBox(height: 30),
+                  Text('Create your account', style: TextStyle(color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontSize: 15),),
+                    SizedBox(height: 50),
+                    nameField,
+                    SizedBox(height: 25),
+                    emailField,
+                    SizedBox(height: 25),
+                    passwordField,
+                    SizedBox(height: 25),
+                    signupButton,
+                    SizedBox(height: 30),
+
+                ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.yellow,
+                  fixedSize: const Size(300, 50)),
+              onPressed: () async{
+                FirebaseService service = FirebaseService();
+                try {
+                  await service.signInWithGoogle();
+                  navigateScreen(context,  Dashboard());
+                } catch (e) {
+                  if (e is FirebaseAuthException) {
+                    showMessage(context, e.message!);
+                  }
+                }
+              },
+                  child: Text('Sign up with google',
+                style: TextStyle(color: Colors.black,
+                  fontSize: 20.0,
+                fontFamily: 'Montserrat'),),
+
+            ),
+                    SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Already have an account?',
+                        style: TextStyle(fontFamily: 'Montserrat',),),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                          },
+                          child: Text('Login', style: TextStyle(
+                            fontSize: 15, color: Colors.blue,
+                            fontFamily: 'Montserrat',
+                          ),),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+  }
+
+  void SignUp(String email, String password) async {
+    if (_formKey.currentState!.validate()) {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password)
+          .then((value) => {
+      postDetailsToFirestore(),
+      });
+    }
+  }
+
+    postDetailsToFirestore() async {
+
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.name = nameEditingController.text;
+    userModel.password = passwordEditingController.text;
+    
+    await firebaseFirestore 
+    .collection("user")
+    .doc(user.uid)
+    .set(userModel.toMap());
+
+    Navigator.pushAndRemoveUntil((context), MaterialPageRoute(builder: (context) => Dashboard()), (route) => false);
+
+    }
+
+  }
+
