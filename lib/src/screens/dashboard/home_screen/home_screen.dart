@@ -3,7 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sa_foodie/src/screens/dashboard/home_screen/popular_food.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
 import '../../review/review_screen.dart';
 import 'icrcream.dart';
 
@@ -16,40 +19,29 @@ class _HomeScreenState extends State<HomeScreen> {
   final currentUser = FirebaseAuth.instance.currentUser;
   DateTime pre_backpress = DateTime.now();
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-          final timegap = DateTime.now().difference(pre_backpress);
-          final cantExit = timegap >= Duration(seconds: 2);
-          pre_backpress = DateTime.now();
-          if (cantExit) {
-            //show snackbar
-            final snack = SnackBar(
-              content: Text('Press Back button again to Exit'),
-              duration: Duration(seconds: 2),);
-            ScaffoldMessenger.of(context).showSnackBar(snack);
-            return false;
-          } else {
-            return true;
-          }
-        },
-      child: SafeArea(
-        maintainBottomViewPadding: true,
+      onWillPop: () async {
+        final timegap = DateTime.now().difference(pre_backpress);
+        final cantExit = timegap >= Duration(seconds: 2);
+        pre_backpress = DateTime.now();
+        if (cantExit) {
+          final snack = SnackBar(
+            content: Text('Press Back button again to Exit'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+          return false;
+        } else {
+          return true;
+        }
+      },
         child: Scaffold(
-          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             backgroundColor: Colors.yellow[600],
             centerTitle: true,
-            title: Text(
-              'Welcome to Foodiez',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  color: Colors.black,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold),
-            ),
+            title: Text('Welcome to Foodiez', style: text_style),
             automaticallyImplyLeading: false,
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(56.0),
@@ -81,11 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       'Popular Food',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.black,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold),
+                      style: buildTextStyle(),
                     ),
                     TextButton(
                       onPressed: () {
@@ -96,12 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'See all',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 18.0,
-                            fontFamily: 'Montserrat'),
+                        style: buildTextStyleSeeAll(),
                       ),
                     ),
                   ],
@@ -115,12 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       'Ice Cream',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                      ),
+                      style: buildTextStyle(),
                     ),
                     TextButton(
                       onPressed: () {
@@ -131,12 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'See all',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 18.0,
-                            fontFamily: 'Montserrat'),
+                        style: buildTextStyleSeeAll(),
                       ),
                     ),
                   ],
@@ -146,8 +123,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
+  }
+
+  TextStyle buildTextStyleSeeAll() {
+    return TextStyle(
+        color: Colors.blue, fontSize: 18.0, fontFamily: 'Montserrat');
+  }
+
+  TextStyle buildTextStyle() {
+    return TextStyle(
+        fontFamily: 'Montserrat',
+        color: Colors.black,
+        fontSize: 25.0,
+        fontWeight: FontWeight.bold);
   }
 }
 
@@ -157,14 +146,13 @@ Widget buildScroll(BuildContext context, String uid) => Container(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              // padding: EdgeInsets.only(top: 5),
               height: MediaQuery.of(context).size.height * 0.3,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("cuisines")
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if(!snapshot.hasData){
+                  if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
@@ -175,18 +163,16 @@ Widget buildScroll(BuildContext context, String uid) => Container(
                       itemBuilder: (context, index) {
                         DocumentSnapshot cuisines = snapshot.data?.docs[index]
                             as DocumentSnapshot<Object?>;
-
-                        var _color = Colors.red ;
-
                         return Card(
                             elevation: 10.0,
                             child: GestureDetector(
                               onTap: () async {
-
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ReviewScreen(name: cuisines['name'], img: cuisines['img']),
+                                    builder: (context) => ReviewScreen(
+                                        name: cuisines['name'],
+                                        img: cuisines['img']),
                                   ),
                                 );
                               },
@@ -197,11 +183,7 @@ Widget buildScroll(BuildContext context, String uid) => Container(
                                   children: [
                                     Text(
                                       cuisines['name'],
-                                      style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0),
+                                      style: style_text_image
                                     ),
                                     Image.network(
                                       cuisines['img'],
@@ -220,13 +202,16 @@ Widget buildScroll(BuildContext context, String uid) => Container(
                                           'img': cuisines['img'],
                                         });
                                         final snackBar = SnackBar(
-                                          content: const Text('Item added to favorite!'),
+                                          duration: Duration(seconds: 1),
+                                          content: const Text(
+                                              'Item added to favorite!'),
                                           action: SnackBarAction(
-                                            onPressed: () {
-                                            }, label: '',
+                                            onPressed: () {},
+                                            label: '',
                                           ),
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       },
                                       icon: Icon(
                                         Icons.favorite_border,
@@ -258,7 +243,7 @@ Widget icecreamList(BuildContext context, String uid) => Container(
                     .collection("icecream")
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if(!snapshot.hasData){
+                  if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
@@ -270,62 +255,61 @@ Widget icecreamList(BuildContext context, String uid) => Container(
                         DocumentSnapshot icecream = snapshot.data?.docs[index]
                             as DocumentSnapshot<Object?>;
                         return Card(
-                          elevation: 10.0,
-                          child:GestureDetector(
-                            onTap: () async {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReviewScreen(name: icecream['name'], img: icecream['img']),
-                            ),
-                          );
-                        },
-                           child: Container(
-                            width: 200,
-                            height: 200,
-                            child: Column(
-                              children: [
-                                Text(
-                                  icecream['name'],
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
+                            elevation: 10.0,
+                            child: GestureDetector(
+                              onTap: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReviewScreen(
+                                        name: icecream['name'],
+                                        img: icecream['img']),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 200,
+                                height: 200,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      icecream['name'],
+                                      style: style_text_image
+                                    ),
+                                    Image.network(
+                                      icecream['img'],
+                                      height: 170,
+                                      width: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.favorite_border),
+                                      onPressed: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection('user')
+                                            .doc(uid)
+                                            .collection('favourites')
+                                            .add({
+                                          'name': icecream['name'],
+                                          'img': icecream['img'],
+                                        });
+                                        final snackBar = SnackBar(
+                                          duration: Duration(seconds: 1),
+                                          content: const Text(
+                                              'Item added to favorite!'),
+                                          action: SnackBarAction(
+                                            onPressed: () {},
+                                            label: '',
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                Image.network(
-                                  icecream['img'],
-                                  height: 170,
-                                  width: 200,
-                                  fit: BoxFit.cover,
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.favorite_border),
-                                  onPressed: () async {
-                                    await FirebaseFirestore.instance
-                                        .collection('user')
-                                        .doc(uid)
-                                        .collection('favourites')
-                                        .add({
-                                      'name': icecream['name'],
-                                      'img': icecream['img'],
-                                    });
-                                    final snackBar = SnackBar(
-                                      content: const Text('Item added to favorite!'),
-                                      action: SnackBarAction(
-                                        onPressed: () {
-                                        }, label: '',
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                        );
+                              ),
+                            ));
                       });
                 },
               ),

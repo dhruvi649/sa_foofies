@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sa_foodie/constants.dart';
 import 'package:sa_foodie/src/screens/dashboard/dashboard.dart';
-import 'package:sa_foodie/src/screens/dashboard/home_screen/home_screen.dart';
-import 'package:sa_foodie/src/screens/login/login_screen.dart';
-import 'package:sa_foodie/src/screens/signin/signin.dart';
 import 'package:sa_foodie/src/screens/welcome_screen/welcome_screen/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -37,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Container(
       height: animation.value,
       width: animation.value,
-      child: Image.asset('lib/src/assets/images/splash_screen.jpg'),
+      child: Image.asset('assets/splash_screen.png'),
     );
   }
 

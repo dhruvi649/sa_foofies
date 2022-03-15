@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
+import '../../review/review_screen.dart';
 
 class PopularFood extends StatelessWidget
 {
@@ -12,7 +15,7 @@ class PopularFood extends StatelessWidget
       appBar: AppBar(
         backgroundColor: Colors.yellow[600],
         title: Text('Popular Foods',
-        style: TextStyle(color: Colors.black,  fontSize: 25.0, fontWeight: FontWeight.bold,fontFamily: 'Montserrat',),),
+        style: text_style),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
@@ -26,8 +29,6 @@ class PopularFood extends StatelessWidget
 Widget popularFood(BuildContext context, String uid) => Container(
   child:
         Container(
-          //padding: EdgeInsets.only(top: 10),
-          //height: MediaQuery.of(context).size.height * 0.2,
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection("cuisines_list").snapshots(),
             builder: (context, snapshot){
@@ -44,36 +45,45 @@ Widget popularFood(BuildContext context, String uid) => Container(
                     DocumentSnapshot cuisines_list = snapshot.data?.docs[index] as DocumentSnapshot<Object?>;
                     return Card(
                       elevation: 10.0,
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        child: Column(
-                          children: [
-                            Text(
-                              cuisines_list['name'],
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewScreen(
+                                  name: cuisines_list['name'],
+                                  img: cuisines_list['img']),
                             ),
-                            Image.network(cuisines_list['img'],height: 120,width: 200,fit: BoxFit.cover,),
-                            IconButton(onPressed: () async {
-                              await FirebaseFirestore.instance.collection('user').doc(uid).collection('favourites').add(
-                                  {
-                                    'name':cuisines_list['name'],
-                                    'img':cuisines_list['img'],
-                                  });
-                              final snackBar = SnackBar(
-                                content: const Text('Item added to favorite!'),
-                                action: SnackBarAction(
-                                  onPressed: () {
-                                  }, label: '',
-                                ),
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            }, icon: Icon(Icons.favorite_border)),
-                          ],
+                          );
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Text(
+                                cuisines_list['name'],
+                                style: style_text_image
+                              ),
+                              Image.network(cuisines_list['img'],height: 120,width: 200,fit: BoxFit.cover,),
+                              IconButton(onPressed: () async {
+                                await FirebaseFirestore.instance.collection('user').doc(uid).collection('favourites').add(
+                                    {
+                                      'name':cuisines_list['name'],
+                                      'img':cuisines_list['img'],
+                                    });
+                                final snackBar = SnackBar(
+                                  duration: Duration(seconds: 1),
+                                  content: const Text('Item added to favorite!'),
+                                  action: SnackBarAction(
+                                    onPressed: () {
+                                    }, label: '',
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }, icon: Icon(Icons.favorite_border)),
+                            ],
+                          ),
                         ),
                       ),
                     );

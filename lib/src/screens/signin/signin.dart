@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sa_foodie/src/model/user_model.dart';
 import 'package:sa_foodie/src/screens/dashboard/dashboard.dart';
 import 'package:sa_foodie/src/screens/login/login_screen.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
 
 import '../../../constants.dart';
 import '../../firebase/firebase_service.dart';
@@ -25,106 +26,7 @@ class SigninScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final nameField = TextFormField(
-      autofocus: false,
-      controller: nameEditingController,
-      validator: (value){
-        if(value!.isEmpty){
-          return ("Please enter your username");
-        }
-      },
-      onSaved: (value) {
-        nameEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          hintText: "Username",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
-
-    final emailField = TextFormField(
-      autofocus: false,
-      controller: emailEditingController,
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Please enter your email");
-        }
-        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-          return ("Please enter a valid email");
-        }
-        return null;
-      },
-      onSaved: (value) {
-        emailEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          hintText: "Email",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
-
-    final passwordField = TextFormField(
-      autofocus: false,
-      controller: passwordEditingController,
-      validator: (value) {
-        RegExp regex = new RegExp(r'^.{6,}$');
-        if (value!.isEmpty) {
-          return ("Please enter your password");
-        }
-        if (!regex.hasMatch(value)) {
-          return ("Please enter valid password(Minimum 6 character)");
-        }
-      },
-      obscureText: _isObscure,
-      onSaved: (value) {
-        passwordEditingController.text = value!;
-      },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-          hintText: "Password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        suffixIcon: IconButton(
-      icon: Icon(
-      _isObscure ? Icons.visibility_off : Icons.visibility,
-      ),
-        onPressed: () {
-          setState(() {
-            _isObscure = !_isObscure;
-          });
-        }),
-          ),
-    );
-
-    final signupButton = Material(
-      elevation: 5,
-      color: Colors.yellow,
-      borderRadius: BorderRadius.circular(30),
-      child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        minWidth: MediaQuery.of(context).size.width,
-        onPressed: () {
-          SignUp(emailEditingController.text, passwordEditingController.text);
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
-        },
-        child: Text(
-          'SignUp',
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 20.0,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    );
-
-    return Scaffold(
+   return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -141,12 +43,7 @@ class SigninScreenState extends State<SigninScreen> {
                     ),
                     Text(
                       'Welcome to Foodies',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                      ),
+                      style: textLogin
                     ),
                     SizedBox(height: 30),
                     Text(
@@ -157,13 +54,13 @@ class SigninScreenState extends State<SigninScreen> {
                           fontSize: 15),
                     ),
                     SizedBox(height: 50),
-                    nameField,
+                    buildTextFormFieldUname(),
                     SizedBox(height: 25),
-                    emailField,
+                    buildTextFormFieldEmail(),
                     SizedBox(height: 25),
-                    passwordField,
+                    buildTextFormFieldPassword(),
                     SizedBox(height: 25),
-                    signupButton,
+                    buildMaterial(context),
                     SizedBox(height: 20),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -224,6 +121,113 @@ class SigninScreenState extends State<SigninScreen> {
         ),
       ),
     );
+  }
+
+  Material buildMaterial(BuildContext context) {
+    return Material(
+    elevation: 5,
+    color: Colors.yellow,
+    borderRadius: BorderRadius.circular(30),
+    child: MaterialButton(
+      padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      minWidth: MediaQuery.of(context).size.width,
+      onPressed: () {
+        SignUp(emailEditingController.text, passwordEditingController.text);
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+      },
+      child: Text(
+        'SignUp',
+        style: TextStyle(
+          fontFamily: 'Montserrat',
+          fontSize: 20.0,
+          color: Colors.black,
+        ),
+      ),
+    ),
+  );
+  }
+
+  TextFormField buildTextFormFieldPassword() {
+    return TextFormField(
+    autofocus: false,
+    controller: passwordEditingController,
+    validator: (value) {
+      RegExp regex = new RegExp(r'^.{6,}$');
+      if (value!.isEmpty) {
+        return ("Please enter your password");
+      }
+      if (!regex.hasMatch(value)) {
+        return ("Please enter valid password(Minimum 6 character)");
+      }
+    },
+    obscureText: _isObscure,
+    onSaved: (value) {
+      passwordEditingController.text = value!;
+    },
+    textInputAction: TextInputAction.done,
+    decoration: InputDecoration(
+        hintText: "Password",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      suffixIcon: IconButton(
+    icon: Icon(
+    _isObscure ? Icons.visibility_off : Icons.visibility,
+    ),
+      onPressed: () {
+        setState(() {
+          _isObscure = !_isObscure;
+        });
+      }),
+        ),
+  );
+  }
+
+  TextFormField buildTextFormFieldEmail() {
+    return TextFormField(
+    autofocus: false,
+    controller: emailEditingController,
+    keyboardType: TextInputType.emailAddress,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return ("Please enter your email");
+      }
+      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+        return ("Please enter a valid email");
+      }
+      return null;
+    },
+    onSaved: (value) {
+      emailEditingController.text = value!;
+    },
+    textInputAction: TextInputAction.next,
+    decoration: InputDecoration(
+        hintText: "Email",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        )),
+  );
+  }
+
+  TextFormField buildTextFormFieldUname() {
+    return TextFormField(
+    autofocus: false,
+    controller: nameEditingController,
+    validator: (value){
+      if(value!.isEmpty){
+        return ("Please enter your username");
+      }
+    },
+    onSaved: (value) {
+      nameEditingController.text = value!;
+    },
+    textInputAction: TextInputAction.next,
+    decoration: InputDecoration(
+        hintText: "Username",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        )),
+  );
   }
 
   void SignUp(String email, String password) async {

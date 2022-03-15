@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sa_foodie/src/screens/review/see_reviews.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
 
 class ReviewScreen extends StatefulWidget {
   final String name;
@@ -47,11 +48,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         centerTitle: true,
         title: Text(
           'Review',
-          style: TextStyle(
-              fontFamily: 'Montserrat',
-              color: Colors.black,
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold),
+          style: text_style
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -59,7 +56,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
         child: Center(
           child: Container(
             child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 20),
@@ -144,7 +140,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         'user': _displayName,
                         'itemName': widget.name,
                       });
-                     
+                      final snackBar = SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: const Text('Review added successfully!'),
+                        action: SnackBarAction(
+                          onPressed: () {},
+                          label: '',
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
                       _controller.clear();
                     },
                     child: Text(

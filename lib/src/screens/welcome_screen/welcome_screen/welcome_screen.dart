@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:sa_foodie/src/screens/login/login_screen.dart';
+import 'package:sa_foodie/src/screens/welcome_screen/widget/image.dart';
 import 'package:sa_foodie/src/screens/welcome_screen/widget/welcome_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -14,41 +15,32 @@ class WelcomeScreen extends StatelessWidget {
             title: 'Quick Search',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-              height: 100,
-              child: Image.asset(
-                  'lib/src/assets/images/welcome_screen/search.png',
-              ),
+                height: 100,
+                child: search
             ),
           ),
           PageViewModel(
             title: 'Verity of Food',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-              height: 100,
-              child: Image.asset('lib/src/assets/images/welcome_screen/food.png',
-              ),
+                height: 100,
+                child: food
             ),
           ),
           PageViewModel(
             title: 'Search for a Place',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-              height: 100,
-              child: Image.asset(
-                  'lib/src/assets/images/welcome_screen/map.png',
-                height: 190,
-                width: 190,
-              ),
+                height: 100,
+                child: map
             ),
           ),
           PageViewModel(
             title: 'Fast Shipping',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-              height: 100,
-              child: Image.asset(
-                  'lib/src/assets/images/welcome_screen/shipping.jpg',
-              ),
+                height: 100,
+                child: shipping
             ),
             footer: WelcomeButtom(),
           ),
@@ -64,17 +56,15 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
-    void gotoLogin(context) => Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => LoginScreen())
-    );
 
+  void gotoLogin(context) =>
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => LoginScreen())
+      );
 
-  Widget buildImage(String path) =>
-      Center(child: Image.asset(path, width: 350,),);
+  DotsDecorator getDotsDecoration() =>
+      DotsDecorator(
+        activeColor: Colors.black,
+      );
 }
-
-DotsDecorator getDotsDecoration() => DotsDecorator(
-  //color: Colors.black,
-  activeColor: Colors.black,
-);
 

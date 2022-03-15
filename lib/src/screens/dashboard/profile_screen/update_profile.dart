@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
 
 class UpdateProfile extends StatefulWidget {
   @override
@@ -16,55 +17,6 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     final nameEditingController = new TextEditingController();
     final emailEditingController = new TextEditingController();
-
-    final nameField = TextFormField(
-      autofocus: false,
-      controller: nameEditingController,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Please enter your username");
-        }
-      },
-      onSaved: (value) {
-        setState(() {
-          nameEditingController.text = value!;
-        });
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          hintText: "Username",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
-
-    final emailField = TextFormField(
-      autofocus: false,
-      controller: emailEditingController,
-      keyboardType: TextInputType.emailAddress,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return ("Please enter your email");
-        }
-        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-          return ("Please enter a valid email");
-        }
-        // return null;
-      },
-      onSaved: (value) {
-        setState(() {
-          emailEditingController.text = value!;
-
-        });
-
-      },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-          hintText: "Email",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )),
-    );
 
     final signupButton = Material(
       elevation: 5,
@@ -88,7 +40,19 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
             } catch (e) {
               print(e);
             }
+            final snackBar = SnackBar(
+              duration: Duration(seconds: 1),
+              content: const Text(
+                  'Profile updated!'),
+              action: SnackBarAction(
+                onPressed: () {},
+                label: '',
+              ),
+            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(snackBar);
           }
+
 
         },
         child: Text(
@@ -107,11 +71,7 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
         backgroundColor: Colors.yellow[600],
         title: Text(
           'Update Profile',
-          style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Montserrat',
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold),
+          style: text_style
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -123,9 +83,9 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
               key: _formKey,
               child: Column(
                 children: [
-                  nameField,
+                  buildTextFormFieldUname(nameEditingController),
                   SizedBox(height: 30),
-                  emailField,
+                  buildTextFormFieldEmail(emailEditingController),
                   SizedBox(height: 40),
                   signupButton,
                 ],
@@ -135,5 +95,58 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
         ),
       ),
     );
+  }
+
+  TextFormField buildTextFormFieldEmail(TextEditingController emailEditingController) {
+    return TextFormField(
+    autofocus: false,
+    controller: emailEditingController,
+    keyboardType: TextInputType.emailAddress,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return ("Please enter your email");
+      }
+      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+        return ("Please enter a valid email");
+      }
+      // return null;
+    },
+    onSaved: (value) {
+      setState(() {
+        emailEditingController.text = value!;
+
+      });
+
+    },
+    textInputAction: TextInputAction.done,
+    decoration: InputDecoration(
+        hintText: "Email",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        )),
+  );
+  }
+
+  TextFormField buildTextFormFieldUname(TextEditingController nameEditingController) {
+    return TextFormField(
+    autofocus: false,
+    controller: nameEditingController,
+    validator: (value) {
+      if (value!.isEmpty) {
+        return ("Please enter your username");
+      }
+    },
+    onSaved: (value) {
+      setState(() {
+        nameEditingController.text = value!;
+      });
+    },
+    textInputAction: TextInputAction.next,
+    decoration: InputDecoration(
+        hintText: "Username",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        )),
+  );
   }
 }

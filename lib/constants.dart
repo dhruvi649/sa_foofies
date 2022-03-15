@@ -24,18 +24,6 @@ Future navigateScreen(context, screen) {
   );
 }
 
-Future<void> logoutFromApp(context) async {
-  FirebaseService service = FirebaseService();
-  try {
-    await service.signOutFromGoogle();
-    navigateScreen(context, SigninScreen());
-  } catch (e) {
-    if (e is FirebaseAuthException) {
-      showMessage(context, e.message!);
-    }
-  }
-}
-
 void showMessage(context, String message) {
   showDialog(
     context: context,

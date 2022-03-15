@@ -6,6 +6,8 @@ import 'package:sa_foodie/src/model/user_model.dart';
 import 'package:sa_foodie/src/screens/dashboard/profile_screen/change_password.dart';
 import 'package:sa_foodie/src/screens/dashboard/profile_screen/update_profile.dart';
 import 'package:sa_foodie/src/screens/login/login_screen.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -45,14 +47,12 @@ class _LoginScreenState extends State<ProfileScreen> {
               child: Text('Edit',
               style: TextStyle(color: Colors.blue,
                   fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
               fontSize: 20),),),
         ],
         title: Text(
           'Profile',
-          style: TextStyle(
-              fontFamily: 'Montserrat',
-              color: Colors.black, fontSize: 25.0, fontWeight: FontWeight.bold),
-        ),
+          style: text_style),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Center(
@@ -62,24 +62,18 @@ class _LoginScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 100),
+            SizedBox(height: 40),
+
+            CircleAvatar(backgroundImage: AssetImage('assets/profile.jpeg'),
+            radius: 80,),
+            SizedBox(height: 30,),
 
             Text('${logedInUser.name}',
-            style: TextStyle(
-                fontFamily: 'Montserrat',
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold
-            ),),
+            style: style_text_image),
 
             SizedBox(height: 20),
             Text('${logedInUser.email}',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-              ),),
+              style: style_text_image),
 
             SizedBox(height: 30),
             BuildList(),
@@ -97,7 +91,7 @@ Widget BuildList() {
   final auth = FirebaseAuth.instance;
 
   return Flexible(child: ListView.separated(
-    padding: EdgeInsets.only(top: 50,left: 30,right: 30),
+    padding: EdgeInsets.only(top: 40,left: 30,right: 30),
     itemCount: 1,
     itemBuilder: (BuildContext context, int index) {
       return Column(

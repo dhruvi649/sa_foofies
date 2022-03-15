@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
 
 class FavoriteScreen extends StatelessWidget {
   final currentUser = FirebaseAuth.instance.currentUser;
@@ -14,11 +15,7 @@ class FavoriteScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Favorite',
-          style: TextStyle(
-              fontFamily: 'Montserrat',
-              color: Colors.black,
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold),
+          style: text_style
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -80,7 +77,9 @@ class FavoriteScreen extends StatelessWidget {
                                       .collection('favourites')
                                       .doc(food_list.id)
                                       .delete();
-                                  final snakbar = SnackBar(content: const Text('Item removed from favorite!'),
+                                  final snakbar = SnackBar(
+                                    duration: Duration(seconds: 1),
+                                    content: const Text('Item removed from favorite!'),
                                     action: SnackBarAction(
                                       onPressed: () {
                                       }, label: '',

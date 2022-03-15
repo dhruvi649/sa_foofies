@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
 
 class SeeReviews extends StatefulWidget {
   final String name;
@@ -20,13 +22,9 @@ class _SeeReviewsState extends State<SeeReviews> {
       appBar: AppBar(
         backgroundColor: Colors.yellow[600],
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'See All Reviews',
-          style: TextStyle(
-              fontFamily: 'Montserrat',
-              color: Colors.black,
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold),
+          style: text_style
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -59,11 +57,7 @@ class _SeeReviewsState extends State<SeeReviews> {
                               padding: const EdgeInsets.only(left: 10, top: 10),
                               child: Text(
                                 reviews![index]['user'],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                    fontFamily: 'Montserrat'),
+                                style: style_text_image
                               ),
                             ),
                             SizedBox(height: 10.0),

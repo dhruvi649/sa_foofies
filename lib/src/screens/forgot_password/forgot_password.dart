@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sa_foodie/src/widget/app_bar.dart';
 
 class ForgotPassword extends StatefulWidget
 {
@@ -7,8 +8,6 @@ class ForgotPassword extends StatefulWidget
 }
 
 class _ForgotScreenState extends State<ForgotPassword>{
-
-  late String _email;
   final auth = FirebaseAuth.instance;
   final TextEditingController emailController = new TextEditingController();
 
@@ -21,9 +20,7 @@ class _ForgotScreenState extends State<ForgotPassword>{
       centerTitle: true,
       title: Text(
         'Forgot Password',
-        style: TextStyle(
-            fontFamily:  'Montserrat',
-            color: Colors.black, fontSize: 25.0, fontWeight: FontWeight.bold),
+        style: text_style
       ),
       iconTheme: IconThemeData(color: Colors.black),
     ),
