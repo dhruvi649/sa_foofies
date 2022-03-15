@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sa_foodie/src/screens/dashboard/dashboard.dart';
 
 class ForgotPassword extends StatefulWidget
 {
@@ -11,6 +10,8 @@ class _ForgotScreenState extends State<ForgotPassword>{
 
   late String _email;
   final auth = FirebaseAuth.instance;
+  final TextEditingController emailController = new TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +32,30 @@ class _ForgotScreenState extends State<ForgotPassword>{
         children: [
           Padding(
               padding: EdgeInsets.all(50),
-          child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              hintText: "Email",),
-            onChanged: (value){
-              setState(() {
-                _email = value;
-              });
-            },
-          ),
+          child:  TextFormField(
+      autofocus: false,
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please enter your email");
+        }
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return ("Please enter a valid email");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        emailController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+          hintText: "Email",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )
+      ),
+    ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -51,11 +66,19 @@ class _ForgotScreenState extends State<ForgotPassword>{
 
                 ),
                   onPressed: (){
-                    auth.sendPasswordResetEmail(email: _email);
+                  if(emailController.text.isEmpty)
+                    {
+                      print("Please enter email");
+                    }
+                  else{
+                    auth.sendPasswordResetEmail(email: emailController.text);
                     Navigator.of(context).pop();
+                  }
+
                   },
                   child: Text('Submit',
-                  style: TextStyle(fontFamily:  'Montserrat'),),),
+                  style: TextStyle(fontFamily:  'Montserrat',
+                  color: Colors.black),),),
             ],
           ),
         ],

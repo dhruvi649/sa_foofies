@@ -1,53 +1,76 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationScreen extends StatefulWidget {
+  static const String id = "location_screen";
+
+  const LocationScreen({Key? key}) : super(key: key);
 
   @override
-  State<LocationScreen> createState() => _LocationScreenState();
+  _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  final Set<Marker> _markers = {};
+  late GoogleMapController mapController;
 
-  final Set<Marker> _marker = {};
-  late GoogleMapController controllers;
 
   void _onMapCreated(GoogleMapController controller) async {
-    controllers=controller;
-    String data =
-    await DefaultAssetBundle.of(context).loadString('asset/data.json');
-    final jsonResult = jsonDecode(data);
-    print('$jsonResult');
 
-    for (int i = 0; i < jsonResult["location"].length; i++) {
+    String data =
+    await DefaultAssetBundle.of(context).loadString("assets/data.json");
+    final jsonResult = jsonDecode(data);
+    print(jsonResult);
+
+    for (int i = 0; i < jsonResult["locations"].length; i++) {
       setState(() {
-        _marker.add(
+        _markers.add(
           Marker(
-            icon: BitmapDescriptor.defaultMarker,
             markerId: MarkerId("id-$i"),
             position: LatLng(
-              double.parse(jsonResult["location"][i]["latitude"]),
-              double.parse(jsonResult["location"][i]["longitude"]),
+              double.parse(jsonResult["locations"][i]["latitude"]),
+              double.parse(jsonResult["locations"][i]["longitude"]),
             ),
-           infoWindow: InfoWindow(title: jsonResult["location"][i]["name"]),
+            icon: BitmapDescriptor.defaultMarker,
+            infoWindow: InfoWindow(
+              title: jsonResult["locations"][i]["name"],
+            ),
           ),
         );
       });
     }
   }
 
+  // Column _mapCustomInfoWindow(jsonResult, int i) => Column(
+  //   children: [
+  //     _customInfoWindowContainer(jsonResult, i),
+  //   ],
+  // );
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
+      body:  GoogleMap(
         onMapCreated: _onMapCreated,
-        markers: _marker,
-        initialCameraPosition: CameraPosition(target: LatLng(23.031698, 72.472894),
-            zoom: 15)),
-
+        markers: _markers,
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(23.031698, 72.472894),
+          zoom: 15,
+        ),
+      ),
     );
   }
-
-
 }

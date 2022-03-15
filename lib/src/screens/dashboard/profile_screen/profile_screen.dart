@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:sa_foodie/src/firebase/firebase_service.dart';
 import 'package:sa_foodie/src/model/user_model.dart';
 import 'package:sa_foodie/src/screens/dashboard/profile_screen/change_password.dart';
-import 'package:sa_foodie/src/screens/dashboard/profile_screen/list_widget.dart';
 import 'package:sa_foodie/src/screens/dashboard/profile_screen/update_profile.dart';
 import 'package:sa_foodie/src/screens/login/login_screen.dart';
 
@@ -94,14 +93,6 @@ class _LoginScreenState extends State<ProfileScreen> {
     );
   }
 
-//   Future<void> logout(BuildContext context) async
-//   {
-//     await FirebaseAuth.instance.signOut();
-//     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-//   }
-//
-// }
-
 Widget BuildList() {
   final auth = FirebaseAuth.instance;
 
@@ -112,7 +103,7 @@ Widget BuildList() {
       return Column(
         children: [
           ListTile(
-            leading: Text('Give Review',style: TextStyle(fontFamily: 'Montserrat',fontSize: 20),),
+            leading: Text('Invite Friends',style: TextStyle(fontFamily: 'Montserrat',fontSize: 20),),
             trailing: Icon(Icons.arrow_forward_ios),
           ),
           ListTile(

@@ -13,28 +13,43 @@ class WelcomeScreen extends StatelessWidget {
           PageViewModel(
             title: 'Quick Search',
             body: 'Set your location to start exploring  restaurants around you',
-            image: buildImage(
-                'lib/src/assets/images/welcome_screen/search.png'),
-            footer: WelcomeButtom(),
+            image: SizedBox(
+              height: 100,
+              child: Image.asset(
+                  'lib/src/assets/images/welcome_screen/search.png',
+              ),
+            ),
           ),
           PageViewModel(
             title: 'Verity of Food',
             body: 'Set your location to start exploring  restaurants around you',
-            image: buildImage('lib/src/assets/images/welcome_screen/food.jpg'),
-            footer: WelcomeButtom(),
+            image: SizedBox(
+              height: 100,
+              child: Image.asset('lib/src/assets/images/welcome_screen/food.png',
+              ),
+            ),
           ),
           PageViewModel(
             title: 'Search for a Place',
             body: 'Set your location to start exploring  restaurants around you',
-            image: buildImage(
-                'lib/src/assets/images/welcome_screen/location.jpg'),
-            footer: WelcomeButtom(),
+            image: SizedBox(
+              height: 100,
+              child: Image.asset(
+                  'lib/src/assets/images/welcome_screen/map.png',
+                height: 190,
+                width: 190,
+              ),
+            ),
           ),
           PageViewModel(
             title: 'Fast Shipping',
             body: 'Set your location to start exploring  restaurants around you',
-            image: buildImage(
-                'lib/src/assets/images/welcome_screen/shipping.jpg'),
+            image: SizedBox(
+              height: 100,
+              child: Image.asset(
+                  'lib/src/assets/images/welcome_screen/shipping.jpg',
+              ),
+            ),
             footer: WelcomeButtom(),
           ),
         ],

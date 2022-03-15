@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -30,14 +29,6 @@ class FavoriteScreen extends StatelessWidget {
     );
   }
 
-//   Future<void> _detele (String ref) async{
-//         await firebaseFirestore
-//             .collection('user')
-//             .doc
-//   }
-//
-// }
-
   Widget FoodList(BuildContext context, String uid) => Container(
         child: Container(
           //padding: EdgeInsets.only(top: 10),
@@ -49,6 +40,11 @@ class FavoriteScreen extends StatelessWidget {
                 .collection('favourites')
                 .snapshots(),
             builder: (context, snapshot) {
+              if(!snapshot.hasData){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
@@ -84,6 +80,14 @@ class FavoriteScreen extends StatelessWidget {
                                       .collection('favourites')
                                       .doc(food_list.id)
                                       .delete();
+                                  final snakbar = SnackBar(content: const Text('Item removed from favorite!'),
+                                    action: SnackBarAction(
+                                      onPressed: () {
+                                      }, label: '',
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snakbar);
+
                                 },
                                 icon: Icon(Icons.favorite),
                                 color: Colors.red),

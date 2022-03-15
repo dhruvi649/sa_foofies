@@ -25,21 +25,10 @@ class _SplashScreenState extends State<SplashScreen>
     controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 10000));
     final CurvedAnimation curve =
-        CurvedAnimation(parent: controller, curve: Curves.bounceIn);
+        CurvedAnimation(parent: controller, curve: Curves.linear);
     animation = Tween(begin: 0.0, end: 500.0).animate(curve);
 
     controller.forward();
-    // controller.addStatusListener((status) {
-    //   if(status == AnimationStatus.completed){
-    //     final currentUser = FirebaseAuth.instance.currentUser;
-    //     if(currentUser?.email == null){
-    //       navigateScreen(context, SigninScreen());
-    //     }
-    //     else {
-    //       navigateScreen(context, Dashboard());
-    //     }
-    //   }
-    // });
 
     startTimer();
   }
@@ -65,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
   loginRoute() {
     if (FirebaseAuth.instance.currentUser?.email! != null) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => WelcomeScreen()));

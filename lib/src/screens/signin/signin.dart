@@ -9,12 +9,14 @@ import '../../../constants.dart';
 import '../../firebase/firebase_service.dart';
 
 class SigninScreen extends StatefulWidget {
-@override
-State<SigninScreen> createState() => SigninScreenState();
+  @override
+  State<SigninScreen> createState() => SigninScreenState();
 }
 
 class SigninScreenState extends State<SigninScreen> {
   final _auth = FirebaseAuth.instance;
+  bool _isObscure = true;
+
 
   final _formKey = GlobalKey<FormState>();
   final nameEditingController = new TextEditingController();
@@ -23,12 +25,15 @@ class SigninScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final nameField = TextFormField(
       autofocus: false,
       controller: nameEditingController,
-      //validator: (){},
-      onSaved: (value){
+      validator: (value){
+        if(value!.isEmpty){
+          return ("Please enter your username");
+        }
+      },
+      onSaved: (value) {
         nameEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
@@ -36,8 +41,7 @@ class SigninScreenState extends State<SigninScreen> {
           hintText: "Username",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     final emailField = TextFormField(
@@ -53,7 +57,7 @@ class SigninScreenState extends State<SigninScreen> {
         }
         return null;
       },
-      onSaved: (value){
+      onSaved: (value) {
         emailEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
@@ -61,8 +65,7 @@ class SigninScreenState extends State<SigninScreen> {
           hintText: "Email",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     final passwordField = TextFormField(
@@ -77,8 +80,8 @@ class SigninScreenState extends State<SigninScreen> {
           return ("Please enter valid password(Minimum 6 character)");
         }
       },
-      obscureText: true,
-      onSaved: (value){
+      obscureText: _isObscure,
+      onSaved: (value) {
         passwordEditingController.text = value!;
       },
       textInputAction: TextInputAction.done,
@@ -86,8 +89,17 @@ class SigninScreenState extends State<SigninScreen> {
           hintText: "Password",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
+          ),
+        suffixIcon: IconButton(
+      icon: Icon(
+      _isObscure ? Icons.visibility_off : Icons.visibility,
       ),
+        onPressed: () {
+          setState(() {
+            _isObscure = !_isObscure;
+          });
+        }),
+          ),
     );
 
     final signupButton = Material(
@@ -97,15 +109,19 @@ class SigninScreenState extends State<SigninScreen> {
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: (){
+        onPressed: () {
           SignUp(emailEditingController.text, passwordEditingController.text);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
         },
-        child: Text('SignUp', style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontSize: 20.0,
-          color: Colors.black,
-        ),),),
+        child: Text(
+          'SignUp',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontSize: 20.0,
+            color: Colors.black,
+          ),
+        ),
+      ),
     );
 
     return Scaffold(
@@ -123,13 +139,23 @@ class SigninScreenState extends State<SigninScreen> {
                     SizedBox(
                       height: 70,
                     ),
-                    Text('Welcome to Foodies', style: TextStyle(color: Colors.black,
-                        fontSize: 30, fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',),),
-                  SizedBox(height: 30),
-                  Text('Create your account', style: TextStyle(color: Colors.black,
-                      fontFamily: 'Montserrat',
-                      fontSize: 15),),
+                    Text(
+                      'Welcome to Foodies',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      'Create your account',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Montserrat',
+                          fontSize: 15),
+                    ),
                     SizedBox(height: 50),
                     nameField,
                     SizedBox(height: 25),
@@ -138,43 +164,55 @@ class SigninScreenState extends State<SigninScreen> {
                     passwordField,
                     SizedBox(height: 25),
                     signupButton,
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.yellow,
+                          fixedSize: const Size(320, 50)),
+                      onPressed: () async {
+                        FirebaseService service = FirebaseService();
+                        try {
+                          await service.signInWithGoogle();
+                          navigateScreen(context, Dashboard());
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            showMessage(context, e.message!);
+                          }
+                        }
+                      },
+                      child: Text(
+                        'Sign up with google',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'Montserrat'),
+                      ),
+                    ),
                     SizedBox(height: 30),
-
-                ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.yellow,
-                  fixedSize: const Size(300, 50)),
-              onPressed: () async{
-                FirebaseService service = FirebaseService();
-                try {
-                  await service.signInWithGoogle();
-                  navigateScreen(context,  Dashboard());
-                } catch (e) {
-                  if (e is FirebaseAuthException) {
-                    showMessage(context, e.message!);
-                  }
-                }
-              },
-                  child: Text('Sign up with google',
-                style: TextStyle(color: Colors.black,
-                  fontSize: 20.0,
-                fontFamily: 'Montserrat'),),
-
-            ),
-                    SizedBox(height: 10),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already have an account?',
-                        style: TextStyle(fontFamily: 'Montserrat',),),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                          },
-                          child: Text('Login', style: TextStyle(
-                            fontSize: 15, color: Colors.blue,
+                        Text(
+                          'Already have an account?',
+                          style: TextStyle(
                             fontFamily: 'Montserrat',
-                          ),),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                          },
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.blue,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
                         )
                       ],
                     )
@@ -186,21 +224,19 @@ class SigninScreenState extends State<SigninScreen> {
         ),
       ),
     );
-
   }
 
   void SignUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password)
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-      postDetailsToFirestore(),
-      });
+                postDetailsToFirestore(),
+              });
     }
   }
 
-    postDetailsToFirestore() async {
-
+  postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
@@ -210,15 +246,13 @@ class SigninScreenState extends State<SigninScreen> {
     userModel.uid = user.uid;
     userModel.name = nameEditingController.text;
     userModel.password = passwordEditingController.text;
-    
-    await firebaseFirestore 
-    .collection("user")
-    .doc(user.uid)
-    .set(userModel.toMap());
 
-    Navigator.pushAndRemoveUntil((context), MaterialPageRoute(builder: (context) => Dashboard()), (route) => false);
+    await firebaseFirestore
+        .collection("user")
+        .doc(user.uid)
+        .set(userModel.toMap());
 
-    }
-
+    Navigator.pushAndRemoveUntil((context),
+        MaterialPageRoute(builder: (context) => Dashboard()), (route) => false);
   }
-
+}

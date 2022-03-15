@@ -36,6 +36,11 @@ Widget popularFood(BuildContext context, String uid) => Container(
                   //scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index){
+                    if(!snapshot.hasData){
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     DocumentSnapshot cuisines_list = snapshot.data?.docs[index] as DocumentSnapshot<Object?>;
                     return Card(
                       elevation: 10.0,
@@ -59,6 +64,14 @@ Widget popularFood(BuildContext context, String uid) => Container(
                                     'name':cuisines_list['name'],
                                     'img':cuisines_list['img'],
                                   });
+                              final snackBar = SnackBar(
+                                content: const Text('Item added to favorite!'),
+                                action: SnackBarAction(
+                                  onPressed: () {
+                                  }, label: '',
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }, icon: Icon(Icons.favorite_border)),
                           ],
                         ),

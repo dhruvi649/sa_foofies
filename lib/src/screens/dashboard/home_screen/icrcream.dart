@@ -35,6 +35,11 @@ class IceCream extends StatelessWidget {
             stream: FirebaseFirestore.instance.collection("icecream_grid")
                 .snapshots(),
             builder: (context, snapshot) {
+              if(!snapshot.hasData){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
@@ -67,6 +72,14 @@ class IceCream extends StatelessWidget {
                                     'name':icecream_grid['name'],
                                     'img':icecream_grid['img'],
                                   });
+                              final snackBar = SnackBar(
+                                content: const Text('Item added to favorite!'),
+                                action: SnackBarAction(
+                                  onPressed: () {
+                                  }, label: '',
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }, icon: Icon(
                                 Icons.favorite_border)),
                           ],

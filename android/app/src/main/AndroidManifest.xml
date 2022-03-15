@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sa.foodie.sa_foodie">
-    
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET"/>
     
    <application
@@ -33,7 +36,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyBx6Io8FQNc1V3ECTaHRQg52SAnLBmWUNk"/>
+           android:value="AIzaSyB0QJfdlYRTFQIfT0ztWD1TbFn35Uk6X3A"/>
     </application>
 </manifest>
+

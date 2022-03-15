@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:sa_foodie/src/screens/dashboard/dashboard.dart';
 import 'package:sa_foodie/src/screens/forgot_password/forgot_password.dart';
 import 'package:sa_foodie/src/screens/signin/signin.dart';
+import 'package:sa_foodie/src/firebase/firebase_service.dart';
+
+import '../../../constants.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  bool _isObscure = true;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
@@ -59,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return ("Please enter valid password(Minimum 6 character)");
         }
       },
-      obscureText: true,
+      obscureText: _isObscure,
       onSaved: (value) {
         passwordController.text = value!;
       },
@@ -68,7 +72,16 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: "Password",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
+          ),
+        suffixIcon: IconButton(
+            icon: Icon(
+              _isObscure ? Icons.visibility_off : Icons.visibility,
+            ),
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            }),
       ),
     );
 
@@ -124,7 +137,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 15),)),
                     SizedBox(height: 25,),
                     loginButton,
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.yellow,
+                          fixedSize: const Size(320, 50)),
+                      onPressed: () async {
+                        FirebaseService service = FirebaseService();
+                        try {
+                          await service.signInWithGoogle();
+                          navigateScreen(context, Dashboard());
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            showMessage(context, e.message!);
+                          }
+                        }
+                      },
+                      child: Text(
+                        'Sign up with google',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'Montserrat'),
+                      ),
+                    ),
+                    SizedBox(height: 20),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
