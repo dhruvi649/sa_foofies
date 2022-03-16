@@ -69,6 +69,7 @@ Widget popularFood(BuildContext context, String uid) => Container(
                               IconButton(onPressed: () async {
                                 await FirebaseFirestore.instance.collection('user').doc(uid).collection('favourites').add(
                                     {
+                                      'category' :cuisines_list['category'],
                                       'name':cuisines_list['name'],
                                       'img':cuisines_list['img'],
                                     });

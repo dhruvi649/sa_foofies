@@ -108,6 +108,7 @@ class SigninScreenState extends State<SigninScreen> {
                               fontSize: 15,
                               color: Colors.blue,
                               fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold
                             ),
                           ),
                         )

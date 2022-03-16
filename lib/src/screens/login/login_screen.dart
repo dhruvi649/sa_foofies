@@ -6,7 +6,6 @@ import 'package:sa_foodie/src/screens/forgot_password/forgot_password.dart';
 import 'package:sa_foodie/src/screens/signin/signin.dart';
 import 'package:sa_foodie/src/firebase/firebase_service.dart';
 import 'package:sa_foodie/src/widget/text_style.dart';
-
 import '../../../constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -75,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 color: Colors.blue,
                                 fontFamily: 'Montserrat',
-                                fontSize: 15),
+                                fontSize: 15,
+                            fontWeight: FontWeight.bold),
                           )),
                       SizedBox(
                         height: 25,
@@ -100,9 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'Sign up with google',
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
-                              fontFamily: 'Montserrat'),
+                            fontSize: 20.0,
+                            fontFamily: 'Montserrat',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -125,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.blue,
-                                  fontFamily: 'Montserrat'),
+                                  fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold),
                             ),
                           )
                         ],

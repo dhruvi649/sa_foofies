@@ -6,4 +6,4 @@ final food = Image.asset('assets/welcome_screen/food.png');
 
 final map = Image.asset('assets/welcome_screen/map.png', height: 190, width: 190);
 
-final shipping = Image.asset('assets/welcome_screen/shipping.jpg');
+final shipping = Image.asset('assets/welcome_screen/shipping.png');

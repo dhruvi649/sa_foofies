@@ -7,13 +7,16 @@ class WelcomeButtom extends StatelessWidget
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: () {
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => LoginScreen(),),);
         },
         child: Text('Login',
-        style: TextStyle(color: Colors.black),),
-        style: ElevatedButton.styleFrom(primary: Colors.white),);
+        style: TextStyle(color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 20),),
+        style: ElevatedButton.styleFrom(primary: Colors.white,
+        fixedSize: Size(250, 50)),);
   }
 
 }

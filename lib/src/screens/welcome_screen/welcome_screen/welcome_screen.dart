@@ -15,7 +15,7 @@ class WelcomeScreen extends StatelessWidget {
             title: 'Quick Search',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-                height: 100,
+                height: 150,
                 child: search
             ),
           ),
@@ -23,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
             title: 'Verity of Food',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-                height: 100,
+                height: 150,
                 child: food
             ),
           ),
@@ -31,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
             title: 'Search for a Place',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-                height: 100,
+                height: 150,
                 child: map
             ),
           ),
@@ -39,7 +39,7 @@ class WelcomeScreen extends StatelessWidget {
             title: 'Fast Shipping',
             body: 'Set your location to start exploring  restaurants around you',
             image: SizedBox(
-                height: 100,
+                height: 150,
                 child: shipping
             ),
             footer: WelcomeButtom(),

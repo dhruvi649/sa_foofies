@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sa_foodie/src/screens/review/see_reviews.dart';
 import 'package:sa_foodie/src/widget/app_bar.dart';
+import 'package:sa_foodie/src/widget/text_style.dart';
 
 class ReviewScreen extends StatefulWidget {
   final String name;
@@ -87,11 +88,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         padding: const EdgeInsets.only(left: 25.0),
                         child: Text(
                           'Give Review',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: textLogin
                         ),
                       ),
                       TextButton(

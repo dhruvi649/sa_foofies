@@ -13,7 +13,6 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
 
-
   Widget build(BuildContext context) {
     final nameEditingController = new TextEditingController();
     final emailEditingController = new TextEditingController();
@@ -36,24 +35,19 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
                 'email': emailEditingController.text
               });
               Navigator.pop(context, true);
-
             } catch (e) {
               print(e);
             }
             final snackBar = SnackBar(
               duration: Duration(seconds: 1),
-              content: const Text(
-                  'Profile updated!'),
+              content: const Text('Profile updated!'),
               action: SnackBarAction(
                 onPressed: () {},
                 label: '',
               ),
             );
-            ScaffoldMessenger.of(context)
-                .showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
-
-
         },
         child: Text(
           'Update',
@@ -69,10 +63,7 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.yellow[600],
-        title: Text(
-          'Update Profile',
-          style: text_style
-        ),
+        title: Text('Update Profile', style: text_style),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
@@ -97,56 +88,44 @@ class _UpdateProfileScreen extends State<UpdateProfile> {
     );
   }
 
-  TextFormField buildTextFormFieldEmail(TextEditingController emailEditingController) {
+  TextFormField buildTextFormFieldEmail(
+      TextEditingController emailEditingController) {
     return TextFormField(
-    autofocus: false,
-    controller: emailEditingController,
-    keyboardType: TextInputType.emailAddress,
-    validator: (value) {
-      if (value!.isEmpty) {
-        return ("Please enter your email");
-      }
-      if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-        return ("Please enter a valid email");
-      }
-      // return null;
-    },
-    onSaved: (value) {
-      setState(() {
-        emailEditingController.text = value!;
-
-      });
-
-    },
-    textInputAction: TextInputAction.done,
-    decoration: InputDecoration(
-        hintText: "Email",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        )),
-  );
+      autofocus: false,
+      controller: emailEditingController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please enter your email");
+        }
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+          return ("Please enter a valid email");
+        }
+      },
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+          hintText: "Email",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )),
+    );
   }
 
-  TextFormField buildTextFormFieldUname(TextEditingController nameEditingController) {
+  TextFormField buildTextFormFieldUname(
+      TextEditingController nameEditingController) {
     return TextFormField(
-    autofocus: false,
-    controller: nameEditingController,
-    validator: (value) {
-      if (value!.isEmpty) {
-        return ("Please enter your username");
-      }
-    },
-    onSaved: (value) {
-      setState(() {
-        nameEditingController.text = value!;
-      });
-    },
-    textInputAction: TextInputAction.next,
-    decoration: InputDecoration(
-        hintText: "Username",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        )),
-  );
+      controller: nameEditingController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Please enter your username");
+        }
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+          hintText: "Username",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          )),
+    );
   }
 }

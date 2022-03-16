@@ -15,8 +15,7 @@ class IceCream extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.yellow[600],
-        title: Text('Ice Cream',
-          style: text_style),
+        title: Text('Ice Cream', style: text_style),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
@@ -25,16 +24,14 @@ class IceCream extends StatelessWidget {
     );
   }
 
-
-  Widget icecreamList(BuildContext context, String uid) =>
-      Container(
-        child:
-        Container(
+  Widget icecreamList(BuildContext context, String uid) => Container(
+        child: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection("icecream_grid")
+            stream: FirebaseFirestore.instance
+                .collection("icecream_grid")
                 .snapshots(),
             builder: (context, snapshot) {
-              if(!snapshot.hasData){
+              if (!snapshot.hasData) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -45,8 +42,8 @@ class IceCream extends StatelessWidget {
                   //scrollDirection: Axis.horizontal,
                   itemCount: snapshot.data?.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot icecream_grid = snapshot.data
-                        ?.docs[index] as DocumentSnapshot<Object?>;
+                    DocumentSnapshot icecream_grid =
+                        snapshot.data?.docs[index] as DocumentSnapshot<Object?>;
                     return Card(
                       elevation: 10.0,
                       child: GestureDetector(
@@ -65,30 +62,38 @@ class IceCream extends StatelessWidget {
                           height: 200,
                           child: Column(
                             children: [
-                              Text(
-                                icecream_grid['name'],
-                                style: style_text_image
-                              ),
-                              Image.network(icecream_grid['img'], height: 120,
+                              Text(icecream_grid['name'],
+                                  style: style_text_image),
+                              Image.network(
+                                icecream_grid['img'],
+                                height: 120,
                                 width: 200,
-                                fit: BoxFit.cover,),
-                              IconButton(onPressed: () async {
-                                await FirebaseFirestore.instance.collection('user').doc(uid).collection('favourites').add(
-                                    {
-                                      'name':icecream_grid['name'],
-                                      'img':icecream_grid['img'],
+                                fit: BoxFit.cover,
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    await FirebaseFirestore.instance
+                                        .collection('user')
+                                        .doc(uid)
+                                        .collection('favourites')
+                                        .add({
+                                      'category':icecream_grid['category'],
+                                      'name': icecream_grid['name'],
+                                      'img': icecream_grid['img'],
                                     });
-                                final snackBar = SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: const Text('Item added to favorite!'),
-                                  action: SnackBarAction(
-                                    onPressed: () {
-                                    }, label: '',
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              }, icon: Icon(
-                                  Icons.favorite_border)),
+                                    final snackBar = SnackBar(
+                                      duration: Duration(seconds: 1),
+                                      content:
+                                          const Text('Item added to favorite!'),
+                                      action: SnackBarAction(
+                                        onPressed: () {},
+                                        label: '',
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  },
+                                  icon: Icon(Icons.favorite_border)),
                             ],
                           ),
                         ),
@@ -98,6 +103,5 @@ class IceCream extends StatelessWidget {
             },
           ),
         ),
-
       );
 }

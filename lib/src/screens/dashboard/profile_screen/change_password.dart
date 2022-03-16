@@ -32,22 +32,28 @@ class _ChangePasswordScreen extends State<ChangePassword> {
                 buildTextFormFieldPassword(),
                 SizedBox(height: 30),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.yellow, fixedSize: Size(250, 50)),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.yellow,
+                    fixedSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0)
+                    ),
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       await currentUser!
                           .updatePassword(passwordController.text);
+                      final snackBar = SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: const Text('Password changed successfully!'),
+                        action: SnackBarAction(
+                          onPressed: () {},
+                          label: '',
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       Navigator.pop(context);
                     }
-                    final snackBar = SnackBar(
-                      duration: Duration(seconds: 1),
-                      content: const Text('Password changed successfully!'),
-                      action: SnackBarAction(
-                        onPressed: () {},
-                        label: '',
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: Text(
                     'Submit',

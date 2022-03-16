@@ -37,93 +37,99 @@ class _HomeScreenState extends State<HomeScreen> {
           return true;
         }
       },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.yellow[600],
-            centerTitle: true,
-            title: Text('Welcome to Foodiez', style: text_style),
-            automaticallyImplyLeading: false,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(56.0),
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 5.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search for delicious food',
-                    prefixIcon: Icon(Icons.search, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white70),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    contentPadding: EdgeInsets.zero,
-                    filled: true,
-                    fillColor: Colors.white70,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.yellow[600],
+          centerTitle: true,
+          title: Text('Welcome to Foodiez', style: text_style),
+          automaticallyImplyLeading: false,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(56.0),
+            child: Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 5.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search for delicious food',
+                  prefixIcon: Icon(Icons.search, color: Colors.black),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
+                  contentPadding: EdgeInsets.zero,
+                  filled: true,
+                  fillColor: Colors.white70,
                 ),
               ),
             ),
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
                       'Popular Food',
                       style: buildTextStyle(),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PopularFood(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'See all',
-                        style: buildTextStyleSeeAll(),
-                      ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PopularFood(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'See all',
+                      style: buildTextStyleSeeAll(),
                     ),
-                  ],
-                ),
-                buildScroll(context, currentUser!.uid),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
+                  ),
+                ],
+              ),
+              buildScroll(context, currentUser!.uid),
+              SizedBox(
+                height: 20.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
                       'Ice Cream',
                       style: buildTextStyle(),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => IceCream(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'See all',
-                        style: buildTextStyleSeeAll(),
-                      ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => IceCream(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'See all',
+                      style: buildTextStyleSeeAll(),
                     ),
-                  ],
-                ),
-                icecreamList(context, currentUser!.uid),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              icecreamList(context, currentUser!.uid),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   TextStyle buildTextStyleSeeAll() {
@@ -181,10 +187,8 @@ Widget buildScroll(BuildContext context, String uid) => Container(
                                 height: 200,
                                 child: Column(
                                   children: [
-                                    Text(
-                                      cuisines['name'],
-                                      style: style_text_image
-                                    ),
+                                    Text(cuisines['name'],
+                                        style: style_text_image),
                                     Image.network(
                                       cuisines['img'],
                                       height: 170,
@@ -198,6 +202,7 @@ Widget buildScroll(BuildContext context, String uid) => Container(
                                             .doc(uid)
                                             .collection('favourites')
                                             .add({
+                                          'category':cuisines['category'],
                                           'name': cuisines['name'],
                                           'img': cuisines['img'],
                                         });
@@ -236,7 +241,6 @@ Widget icecreamList(BuildContext context, String uid) => Container(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              // padding: EdgeInsets.only(top: 5),
               height: MediaQuery.of(context).size.height * 0.3,
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -272,10 +276,8 @@ Widget icecreamList(BuildContext context, String uid) => Container(
                                 height: 200,
                                 child: Column(
                                   children: [
-                                    Text(
-                                      icecream['name'],
-                                      style: style_text_image
-                                    ),
+                                    Text(icecream['name'],
+                                        style: style_text_image),
                                     Image.network(
                                       icecream['img'],
                                       height: 170,
@@ -290,6 +292,7 @@ Widget icecreamList(BuildContext context, String uid) => Container(
                                             .doc(uid)
                                             .collection('favourites')
                                             .add({
+                                          'category': icecream['category'],
                                           'name': icecream['name'],
                                           'img': icecream['img'],
                                         });

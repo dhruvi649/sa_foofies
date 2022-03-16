@@ -13,16 +13,19 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController controller;
-  late Animation animation;
+  late Animation<double> animation;
 
   void initState() {
     super.initState();
 
     controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 10000));
-    final CurvedAnimation curve =
-        CurvedAnimation(parent: controller, curve: Curves.linear);
-    animation = Tween(begin: 0.0, end: 500.0).animate(curve);
+        vsync: this, duration: Duration(milliseconds: 7000));
+    // final CurvedAnimation curve =
+    //     CurvedAnimation(parent: controller, curve: Curves.elasticOut);
+    animation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.elasticOut,
+    );
 
     controller.forward();
 
@@ -30,9 +33,8 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget builder(BuildContext context, Widget? child) {
-    return Container(
-      height: animation.value,
-      width: animation.value,
+    return RotationTransition(
+      turns: animation,
       child: Image.asset('assets/splash_screen.png'),
     );
   }
@@ -43,17 +45,17 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   startTimer() async {
-    var duration = Duration(milliseconds: 10000);
+    var duration = Duration(milliseconds: 3000);
     return Timer(duration, loginRoute);
   }
 
   loginRoute() {
     if (FirebaseAuth.instance.currentUser?.email! != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+       Navigator.pushReplacement(
+           context, MaterialPageRoute(builder: (context) => Dashboard()));
     } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+       Navigator.pushReplacement(
+           context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
     }
   }
 

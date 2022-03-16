@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,11 +15,9 @@ class _LocationScreenState extends State<LocationScreen> {
   final Set<Marker> _markers = {};
   late GoogleMapController mapController;
 
-
   void _onMapCreated(GoogleMapController controller) async {
-
     String data =
-    await DefaultAssetBundle.of(context).loadString("assets/data.json");
+        await DefaultAssetBundle.of(context).loadString("assets/data.json");
     final jsonResult = jsonDecode(data);
     print(jsonResult);
 
@@ -43,13 +40,6 @@ class _LocationScreenState extends State<LocationScreen> {
     }
   }
 
-  // Column _mapCustomInfoWindow(jsonResult, int i) => Column(
-  //   children: [
-  //     _customInfoWindowContainer(jsonResult, i),
-  //   ],
-  // );
-
-
   @override
   void dispose() {
     super.dispose();
@@ -63,7 +53,7 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  GoogleMap(
+      body: GoogleMap(
         onMapCreated: _onMapCreated,
         markers: _markers,
         initialCameraPosition: const CameraPosition(
